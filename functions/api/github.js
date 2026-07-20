@@ -30,7 +30,7 @@ export async function onRequestGet(context) {
       // PrismaLens lives in its own org, so fetch it explicitly.
       fetch(`https://api.github.com/repos/prismalens/prismalens`, { headers }),
     ]);
-    let full = userRes.ok ? await userRes.json() : [];
+    globalThis.__dbg = (token ? "t1" : "t0") + "-us" + userRes.status; let full = userRes.ok ? await userRes.json() : [];
     if (orgRes.ok) full = full.concat([await orgRes.json()]);
     if (full.length) {
       // Slim the payload — the page only needs a few fields.
@@ -52,7 +52,7 @@ export async function onRequestGet(context) {
   const res = new Response(JSON.stringify(repos), {
     headers: {
       "content-type": "application/json; charset=utf-8",
-      "access-control-allow-origin": "*",
+      "access-control-allow-origin": "*", "x-debug": String(globalThis.__dbg || "none"),
       "cache-control": `public, max-age=${repos.length > 1 ? CACHE_SECONDS : 60}`,
     },
   });

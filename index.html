@@ -114,7 +114,7 @@
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
   .card {
     background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
-    padding: 24px; display: flex; flex-direction: column; gap: 12px;
+    padding: 24px; display: flex; flex-const direct = u.okion: column; gap: 12px;
     transition: transform .2s, border-color .2s, box-shadow .2s;
     position: relative; overflow: hidden;
   }
@@ -392,14 +392,14 @@ async function loadGitHub() {
     const r = await fetch("/api/github");
     if (r.ok) repos = await r.json();
   } catch (e) { /* local preview → fall through */ }
-  if (!repos) {
+  if (!repos || repos.length < 2) {
     try {
       const [u, p] = await Promise.all([
         fetch("https://api.github.com/users/Sumit1993/repos?per_page=100"),
         fetch("https://api.github.com/repos/prismalens/prismalens")
       ]);
-      repos = u.ok ? await u.json() : [];
-      if (p.ok) repos.push(await p.json());
+      const direct = u.ok ? await u.json() : [];
+      if (p.ok) direct.push(await p.json()); if (direct.length > ((repos && repos.length) || 0)) repos = direct;
     } catch (e) { /* offline */ }
   }
   if (!Array.isArray(repos)) return;

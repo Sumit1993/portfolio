@@ -53,9 +53,9 @@ export async function onRequestGet(context) {
     headers: {
       "content-type": "application/json; charset=utf-8",
       "access-control-allow-origin": "*",
-      "cache-control": `public, max-age=${CACHE_SECONDS}`,
+      "cache-control": `public, max-age=${repos.length > 1 ? CACHE_SECONDS : 60}`,
     },
   });
-  context.waitUntil(cache.put(cacheKey, res.clone()));
+  if (repos.length > 1) context.waitUntil(cache.put(cacheKey, res.clone()));
   return res;
 }
